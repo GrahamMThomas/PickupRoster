@@ -1,5 +1,5 @@
-import SessionCreator from "@/app/components/SessionCreator";
-import SessionSelector from "@/app/components/SessionSelector";
+import SessionCreator from "@/app/location/[locationId]/components/SessionCreator";
+import SessionSelector from "@/app/location/[locationId]/components/SessionSelector";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import * as client from "@prisma/client";

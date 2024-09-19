@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { createLocation } from "../../actions/createLocation";
+import { createLocation } from "../actions/createLocation";
 
 export default function LocationCreator() {
   const form = useForm();

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { createSession } from "../../actions/createSession";
+import { createSession } from "../actions/createSession";
 import { revalidatePath } from "next/cache";
 
 interface SessionCreatorProps {
