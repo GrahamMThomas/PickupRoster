@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Player {
-  id         Int    @id @default(autoincrement())
+  id         Int          @id @default(autoincrement())
   name       String
   locationId Int
+  GamePlayer GamePlayer[]
 }
 
 model Location {
@@ -40,16 +41,21 @@ model AttendanceLog {
 
 model Game {
   id          Int          @id @default(autoincrement())
-  sessionId   String
+  status      String
   winningTeam Int?
+  start       DateTime
+  end         DateTime?
   players     GamePlayer[]
+  sessionId   Int
 }
 
+// Is created once game has started.
 model GamePlayer {
   gameId   Int
   playerId Int
   team     Int?
-  Game     Game @relation(fields: [gameId], references: [id])
+  Game     Game   @relation(fields: [gameId], references: [id])
+  Player   Player @relation(fields: [playerId], references: [id])
 
   @@id([gameId, playerId])
 }

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -17,33 +16,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Player } from "@prisma/client";
+import { signIn } from "../actions/signIn";
 import { useForm } from "react-hook-form";
-import { createSession } from "../actions/createSession";
+import PlayerSelector from "./PlayerSelector";
+import React from "react";
 
-interface SessionCreatorProps {
+export default function SignInButton({
+  sessionId,
+  playerList,
+  locationId,
+}: {
+  playerList: Player[];
   locationId: number;
-}
-
-export default function SessionCreator({ locationId }: SessionCreatorProps) {
+  sessionId: number;
+}) {
   const form = useForm();
+  const [player, setPlayer] = React.useState<Player | null>(null);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create new Session</Button>
+        <Button>Sign In</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create Session</DialogTitle>
-          <DialogDescription>
-            Can be anything you want. Name of the occasion, or court distinction.
-          </DialogDescription>
+          <DialogTitle>Sign In</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
-            action={async (formData) => {
-              await createSession(locationId, formData);
+            action={async () => {
+              await signIn(sessionId, player!.id);
               window.location.reload();
             }}
             className="w-2/3 space-y-6"
@@ -51,17 +54,23 @@ export default function SessionCreator({ locationId }: SessionCreatorProps) {
             <FormField
               control={form.control}
               name="name"
-              render={({ field }) => (
-                <FormItem>
+              render={() => (
+                <FormItem className="flex flex-col">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Open Gym - Court 1" {...field} />
+                    <PlayerSelector
+                      locationId={locationId}
+                      playerList={playerList}
+                      onSelect={setPlayer}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Create</Button>
+            <Button type="submit" disabled={player == null}>
+              Sign In
+            </Button>
           </form>
         </Form>
       </DialogContent>
