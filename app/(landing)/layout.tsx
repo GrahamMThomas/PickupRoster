@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen absolute">
       <Image
         src="/images/japan-volleyball-mobile.jpg"
         alt="Background"
