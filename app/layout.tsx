@@ -28,15 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
       >
-        <header className="h-8">
-          <h1>Court Master</h1>
-        </header>
-
-        <div className="grow w-full flex items-center justify-center">{children}</div>
-
-        <footer>
-          <p>Build: v1.0.0</p>
-        </footer>
+        {children}
       </body>
     </html>
   );
