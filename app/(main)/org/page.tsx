@@ -9,7 +9,7 @@ import OrganizationCreator from "./components/OrganzationCreator";
 
 const prisma = new client.PrismaClient();
 
-export default async function OrgRootPage() {
+export default function OrgRootPage() {
   const [orgs, setOrgs] = useState([] as client.Organization[]);
 
   const LoadOrgs = async () => {
