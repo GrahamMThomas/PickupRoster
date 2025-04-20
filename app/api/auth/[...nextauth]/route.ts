@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -10,6 +10,20 @@ export const authOptions = {
   session: {
     strategy: "jwt",
     maxAge: 3000,
+  },
+  callbacks: {
+    async jwt({ token, user }: { token: any; user: User }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
   },
   // Configure one or more authentication providers
   providers: [
