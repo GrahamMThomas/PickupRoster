@@ -23,6 +23,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { createOrganization } from "../../actions/createOrganization";
+import { Organization } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 // TODO: Input validation
 const OrganizationSchema = z.object({
@@ -40,6 +42,12 @@ const OrganizationSchema = z.object({
 type OrganizationFormData = z.infer<typeof OrganizationSchema>;
 
 export default function OrganizationCreator() {
+  const router = useRouter();
+
+  const gotoOrganizationPage = (org: Organization) => {
+    router.push(`/org/${org.id}`);
+  };
+
   const form = useForm<OrganizationFormData>({
     resolver: zodResolver(OrganizationSchema),
     defaultValues: {
@@ -64,8 +72,8 @@ export default function OrganizationCreator() {
           <form
             className="space-y-6 flex flex-col"
             onSubmit={form.handleSubmit(async (data) => {
-              await createOrganization(data);
-              window.location.reload();
+              let org: Organization = await createOrganization(data);
+              gotoOrganizationPage(org);
             })}
           >
             <FormField
