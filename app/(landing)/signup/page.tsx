@@ -19,13 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
-
-enum FormStatus {
-  IDLE = "IDLE",
-  LOADING = "LOADING",
-  SUCCESS = "SUCCESS",
-  ERROR = "ERROR",
-}
+import { FormStatus } from "@/app/models/FormStatus";
+import { Spinner } from "@/app/components/spinner";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -146,7 +141,7 @@ export default function SignupPage() {
                 Back
               </Button> */}
             <Button type="submit" className="flex flex-grow" disabled={status !== FormStatus.IDLE}>
-              {status === FormStatus.LOADING ? "Loading..." : "Sign Up"}
+              {status === FormStatus.LOADING ? <Spinner /> : "Sign Up"}
             </Button>
 
             {status === FormStatus.SUCCESS && <p className="text-green-500">{statusMessage}</p>}

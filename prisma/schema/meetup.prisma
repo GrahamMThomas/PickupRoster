@@ -1,7 +1,7 @@
 model Meetup {
     id          String    @id @default(cuid())
     title       String
-    description String
+    description String?
     startDate   DateTime? // Nullable so it can be TBD
     endDate     DateTime?
     splashImage String?
@@ -18,7 +18,7 @@ model Meetup {
     // Relationships
     org      Organization @relation(fields: [orgId], references: [id])
     roster   Roster       @relation(fields: [rosterId], references: [id])
-    location Location?    @relation(fields: [locationId], references: [id])
+    location Location?    @relation(fields: [locationId], references: [placeId])
 }
 
 // ROSTER
@@ -54,14 +54,9 @@ model MeetupAttendee {
 
 // Location
 model Location {
-    id      String  @id @default(cuid())
+    placeId String @id
     name    String
     address String
-    city    String
-    state   String?
-    country String
-    lat     Float
-    long    Float
 
     Meetup Meetup[]
 }
