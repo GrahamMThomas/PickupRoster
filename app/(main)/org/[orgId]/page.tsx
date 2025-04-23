@@ -4,6 +4,9 @@ import { Users } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import SessionCarousel from "./components/SessionCarousel";
+import AdminEntrypoint from "./components/AdminEntrypoint";
+import MemberManagement from "./components/MemberManagement";
+import CreateSessionButton from "./components/CreateSessionButton";
 
 const DEFAULT_ORG_IMAGE_PATH = "/images/org_default_logo.png";
 
@@ -39,19 +42,21 @@ export default async function OrganizationPage({ params }: { params: { orgId: st
 
   return (
     <div className="flex flex-col h-full w-full items-start justify-start">
-      <h1 className="text-2xl font-bold">{org.displayName}</h1>
-      <p className="text-gray-500">{org.description}</p>
-      <img
-        src={org.image || DEFAULT_ORG_IMAGE_PATH}
-        alt={org.displayName}
-        className="w-32 h-32 rounded-full"
-      />
-      <div className="flex flex-row gap-2 items-center">
-        <Users />
-        <h2 className="text-xl font-semibold">Members: {org.Memberships.length}</h2>
+      <div className="flex flex-row mx-3 gap-2">
+        <img
+          src={org.image || DEFAULT_ORG_IMAGE_PATH}
+          alt={org.displayName}
+          className="w-8 h-8 rounded"
+        />
+        <h1 className="text-2xl font-bold">{org.displayName}</h1>
       </div>
+      <p className="text-gray-500">{org.description || ""}</p>
+
+      <MemberManagement memberships={org.Memberships} />
       <div className="m-3" />
       <SessionCarousel />
+      <div className="m-3" />
+      <CreateSessionButton />
     </div>
   );
 }

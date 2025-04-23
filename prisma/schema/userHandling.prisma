@@ -46,6 +46,8 @@ model User {
     AccountCredential AccountCredential?
 
     Memberships Membership[]
+
+    MeetupAttendee MeetupAttendee[]
 }
 
 model VerificationRequest {
