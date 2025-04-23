@@ -6,16 +6,18 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLoadScript, Autocomplete } from "@react-google-maps/api";
 import { useRef, useState } from "react";
+import ImageUpload from "@/app/components/ImageUpload";
 
 const libraries: any = ["places"];
 
@@ -58,6 +60,7 @@ export default function CreateSessionPage() {
     }),
     description: z.string().optional(),
     location: z.string().optional(),
+    splashImage: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -125,6 +128,21 @@ export default function CreateSessionPage() {
 
           {/* Date and Time Selector */}
           {/* Image Upload */}
+
+          <Controller
+            control={form.control}
+            name="splashImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Splash Image</FormLabel>
+                <ImageUpload
+                  value={field.value || ""}
+                  onChange={(imageUrl) => (field.value = imageUrl)}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
