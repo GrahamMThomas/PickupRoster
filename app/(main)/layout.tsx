@@ -11,16 +11,16 @@ export default function RootLayout({
     <Fragment>
       <header className="h-16">
         <div className="flex items-center justify-between h-full px-4 py-2">
-          <h1>Court Master</h1>
+          <h1 className="font-semibold">Court Master</h1>
           <ProfileHeader />
         </div>
       </header>
 
       <div className="grow w-full flex items-center justify-center">{children}</div>
 
-      <footer>
-        <p>Build: v1.0.0</p>
-      </footer>
+      <div>
+        <p className=" m-2 text-xs text-muted-foreground font-medium">Build v0.0.1b</p>
+      </div>
     </Fragment>
   );
 }

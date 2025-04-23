@@ -1,18 +1,18 @@
 import { PrismaClient, User } from "@prisma/client";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 3000,
   },
   callbacks: {
-    async jwt({ token, user }: { token: any; user: User }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
