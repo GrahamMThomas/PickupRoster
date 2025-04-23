@@ -25,6 +25,8 @@ import { useParams, useRouter } from "next/navigation";
 import { createMeetup, CreateMeetupRequest } from "@/app/(main)/actions/createMeetup";
 import { useOrg } from "../components/OrgContextProvider";
 import { RosterStrategy } from "@prisma/client";
+import OpenPositionFormFields from "./components/OpenPositionFormFields";
+import TeamConfigurer from "./components/TeamConfigurer";
 
 const libraries: any = ["places"];
 
@@ -195,51 +197,44 @@ export default function CreateSessionPage() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                {/* <FormLabel>Name</FormLabel> */}
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={(v) =>
-                      setRosterStrategy(
-                        v === "open" ? RosterStrategy.OPEN : RosterStrategy.POSITIONS
-                      )
-                    }
-                    defaultValue="open"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="open" id="r1" defaultChecked={true} />
-                      <Label htmlFor="r1">Open</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="positions" id="r2" />
-                      <Label htmlFor="r2">Positions</Label>
-                    </div>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex flex-row justify-between w-full">
+            <div className="flex flex-col">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Name</FormLabel> */}
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(v) =>
+                          setRosterStrategy(
+                            v === "open" ? RosterStrategy.OPEN : RosterStrategy.POSITIONS
+                          )
+                        }
+                        defaultValue="open"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="open" id="r1" defaultChecked={true} />
+                          <Label htmlFor="r1">Open</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="positions" id="r2" />
+                          <Label htmlFor="r2">Positions</Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          {rosterStrategy === RosterStrategy.OPEN && (
-            <FormField
-              control={form.control}
-              name="openSlots"
-              render={({ field }) => (
-                <FormItem>
-                  {/* <FormLabel>Name</FormLabel> */}
-                  <FormControl>
-                    <Input className="w-[30%]" placeholder="# People" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+            <div className="w-[40%]">
+              {rosterStrategy === RosterStrategy.OPEN && <OpenPositionFormFields form={form} />}
+              {rosterStrategy === RosterStrategy.POSITIONS && <TeamConfigurer />}
+            </div>
+          </div>
 
           {/* Conditional Position Sign Up */}
 
