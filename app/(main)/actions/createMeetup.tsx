@@ -1,6 +1,7 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { RosterByPosition } from "@/app/models/Team";
+import { PrismaClient, RosterStrategy } from "@prisma/client";
 import { request } from "http";
 
 const prisma = new PrismaClient();
@@ -16,7 +17,9 @@ export interface CreateMeetupRequest {
   orgId: string;
   description?: string;
   splashImage?: string;
-
+  rosterStrategy: RosterStrategy;
+  rosterByPosition: RosterByPosition | null;
+  // rosterOpen:
   location?: CreateLocationRequest;
 }
 
@@ -35,8 +38,11 @@ export async function createMeetup(formData: CreateMeetupRequest) {
     });
   }
 
-  await prisma.roster.create({
-    data: {},
+  let roster = await prisma.roster.create({
+    data: {
+      strategyType: formData.rosterStrategy,
+      strategy: serializedStrategy(formData.rosterStrategy, formData),
+    },
   });
 
   await prisma.meetup.create({
@@ -45,7 +51,23 @@ export async function createMeetup(formData: CreateMeetupRequest) {
       orgId: formData.orgId,
       description: formData.description,
       splashImage: formData.splashImage,
-      locationId: locationToMeet?.id,
+      locationId: locationToMeet?.placeId,
+      rosterId: roster.id,
     },
   });
+}
+
+function serializedStrategy(rosterStrategy: RosterStrategy, request: CreateMeetupRequest): string {
+  switch (rosterStrategy) {
+    case RosterStrategy.POSITIONS:
+      if (!request.rosterByPosition) {
+        throw new Error("Roster by position is required for positions strategy");
+      }
+      console.log(JSON.stringify(request.rosterByPosition));
+      return JSON.stringify(request.rosterByPosition);
+    case RosterStrategy.OPEN:
+      return "";
+    default:
+      throw new Error("Invalid roster strategy: " + rosterStrategy);
+  }
 }

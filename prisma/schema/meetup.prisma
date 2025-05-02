@@ -60,3 +60,13 @@ model Location {
 
     Meetup Meetup[]
 }
+
+// Team
+
+enum VolleyballPosition {
+    SETTER
+    OPPOSITE
+    OUTSIDE
+    MIDDLE
+    LIBERO
+}

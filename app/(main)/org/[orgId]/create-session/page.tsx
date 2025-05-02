@@ -26,7 +26,8 @@ import { createMeetup, CreateMeetupRequest } from "@/app/(main)/actions/createMe
 import { useOrg } from "../components/OrgContextProvider";
 import { RosterStrategy } from "@prisma/client";
 import OpenPositionFormFields from "./components/OpenPositionFormFields";
-import TeamConfigurer from "./components/TeamConfigurer";
+import RosterConfigurer from "./components/TeamConfigurer";
+import { RosterByPosition } from "@/app/models/Team";
 
 const libraries: any = ["places"];
 
@@ -44,6 +45,7 @@ export default function CreateSessionPage() {
   const [formStatus, setFormStatus] = useState(FormStatus.IDLE);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [rosterStrategy, setRosterStrategy] = useState<RosterStrategy>("OPEN");
+  const [rosterByPosition, setRosterByPosition] = useState<RosterByPosition | null>(null);
 
   const router = useRouter();
   const params = useParams();
@@ -102,6 +104,8 @@ export default function CreateSessionPage() {
       description: values.description,
       orgId: org.id,
       splashImage: imageUrl,
+      rosterStrategy: rosterStrategy,
+      rosterByPosition: rosterByPosition,
     };
 
     if (googleMapLocation) {
@@ -123,7 +127,7 @@ export default function CreateSessionPage() {
   if (!isLoaded) return <Spinner />;
 
   return (
-    <div className="flex flex-col h-full w-full items-start justify-start mx-4">
+    <div className="flex flex-col items-start justify-start mx-4">
       <h1>Create Session</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -232,7 +236,9 @@ export default function CreateSessionPage() {
 
             <div className="w-[40%]">
               {rosterStrategy === RosterStrategy.OPEN && <OpenPositionFormFields form={form} />}
-              {rosterStrategy === RosterStrategy.POSITIONS && <TeamConfigurer />}
+              {rosterStrategy === RosterStrategy.POSITIONS && (
+                <RosterConfigurer setRoster={setRosterByPosition} />
+              )}
             </div>
           </div>
 
